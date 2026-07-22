@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -229,10 +229,19 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="w-fit h-10 px-4 py-2.5 rounded cursor-pointer bg-white text-black     text-sm font-semibold hover:bg-zinc-200 transition-all duration-300"
+                className="w-full h-10 px-4 py-2.5 rounded cursor-pointer bg-white text-black     text-sm font-semibold hover:bg-zinc-200 transition-all duration-300"
               >
                 Register Account
               </button>
+
+              <div className="w-full">
+                <a
+                  href="/api/auth/google"
+                  className="w-full h-10 px-4 py-2.5 rounded cursor-pointer bg-white text-black     text-sm font-semibold hover:bg-zinc-200 transition-all duration-300"
+                >
+                  Continue with Google
+                </a>
+              </div>
 
               {/* Login */}
 
