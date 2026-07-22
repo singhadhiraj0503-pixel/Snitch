@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import ContinueWithGoogle from "../components/ContinueWithGoogle";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -148,10 +149,12 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-fit px-4 py-2.5 bg-white text-black uppercase rounded active:scale-95 text-sm font-semibold hover:bg-zinc-200 transition duration-300"
+                className="w-full px-4 py-2.5 bg-white text-black uppercase rounded active:scale-95 text-sm font-semibold hover:bg-zinc-200 transition duration-300"
               >
                 Initialize Session
               </button>
+
+              <ContinueWithGoogle />
 
               {/* Divider */}
 
