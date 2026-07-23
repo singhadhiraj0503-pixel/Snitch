@@ -22,7 +22,7 @@ export const createProduct = async (req, res) => {
     seller: seller._id,
   });
 
-  res
+  return res
     .status(201)
     .json({ message: "Product created successfully", success: true, product });
 };
@@ -32,11 +32,9 @@ export const getSellerProducts = async (req, res) => {
 
   const products = await productModel.find({ seller: seller._id });
 
-  res
-    .status(200)
-    .json({
-      message: "Products fetched Successfully",
-      success: true,
-      products,
-    });
+  return res.status(200).json({
+    message: "Products fetched Successfully",
+    success: true,
+    products,
+  });
 };
