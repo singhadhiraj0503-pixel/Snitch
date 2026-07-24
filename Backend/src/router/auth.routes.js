@@ -4,11 +4,13 @@ import {
   validateRegisterUser,
 } from "../validators/auth.validator.js";
 import {
+  getMe,
   googleCallback,
   login,
   register,
 } from "../controllers/auth.controller.js";
 import passport from "passport";
+import { authenticateUser } from "../middlewares/auth.middleware.js";
 
 const authRouter = Router();
 
@@ -26,5 +28,7 @@ authRouter.get(
   passport.authenticate("google", { session: false }),
   googleCallback,
 );
+
+authRouter.get("/me", authenticateUser, getMe);
 
 export default authRouter;

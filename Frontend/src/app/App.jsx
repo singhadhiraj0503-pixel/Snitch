@@ -2,8 +2,20 @@ import React from "react";
 import { RouterProvider } from "react-router";
 import { routes } from "./app.routes";
 import "./App.css";
+import { useSelector } from "react-redux";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import { useEffect } from "react";
 
 const App = () => {
+  const { handleGetMe } = useAuth();
+
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
+
+  useEffect(() => {
+    handleGetMe();
+  }, []);
+
   return <RouterProvider router={routes} />;
 };
 

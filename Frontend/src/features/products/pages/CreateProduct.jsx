@@ -57,7 +57,7 @@ const CreateProduct = () => {
     });
 
     await handleCreateProduct(data);
-    navigate("/");
+    navigate("/seller/dashboard");
   };
 
   return (
