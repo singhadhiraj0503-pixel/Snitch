@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import ProductCard from "./ProductCard";
+// import { useNavigate } from "react-router";
 
 const ProductGrid = () => {
   const products = useSelector((state) => state.product.products);
   const loading = useSelector((state) => state.product.loading);
+  // const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -52,7 +54,11 @@ const ProductGrid = () => {
         "
       >
         {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
+          <ProductCard
+            // onClick={() => navigate(`/product/${product._id}`)}
+            key={product._id}
+            product={product}
+          />
         ))}
       </div>
     </section>

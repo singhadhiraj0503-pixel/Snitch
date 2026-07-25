@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 const ProductCard = ({ product }) => {
   const image =
@@ -14,8 +15,13 @@ const ProductCard = ({ product }) => {
   const subtitle =
     product?.category?.name || product?.category || "Premium Collection";
 
+  const navigate = useNavigate();
+
   return (
-    <article className="group cursor-pointer">
+    <article
+      className="group cursor-pointer"
+      onClick={() => navigate(`/product/${product._id}`)}
+    >
       {/* Image */}
 
       <div className="relative rounded overflow-hidden border border-[#2A2A2A] bg-[#181818] aspect-[4/5]">

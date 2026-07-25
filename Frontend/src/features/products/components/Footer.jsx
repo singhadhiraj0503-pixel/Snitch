@@ -11,7 +11,7 @@ import { ArrowUpRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#111111] border-t border-[#2A2A2A]">
+    <footer className="bg-[#111111] border-t border-[#2A2A2A] mt-15">
       <div className="max-w-[1700px] mx-auto px-5 lg:px-7 py-7">
         {/* Top */}
 
@@ -132,7 +132,7 @@ const Footer = () => {
 
         {/* Divider */}
 
-        <div className="border-t border-[#2A2A2A] mt-20 pt-8">
+        <div className="border-t border-[#2A2A2A] mt-4 pt-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             {/* Copyright */}
 

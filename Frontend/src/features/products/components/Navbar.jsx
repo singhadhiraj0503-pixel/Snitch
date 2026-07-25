@@ -62,7 +62,7 @@ const Navbar = () => {
         <div className="flex items-center gap-5">
           {/* Search */}
 
-          <div className="hidden md:flex items-center border border-[#313131] h-10 w-[230px] px-3">
+          <div className="hidden md:flex items-center border border-[#313131] rounded h-10 w-[230px] px-3">
             <Search size={15} className="text-zinc-500" />
 
             <input
