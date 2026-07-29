@@ -21,11 +21,15 @@ const ProductDetail = () => {
   const { handleGetProductById } = useProduct();
 
   const [product, setProduct] = useState(null);
+
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedAttributes, setSelectedAttributes] = useState({});
+
   const [loading, setLoading] = useState(true);
 
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const [selectedSize, setSelectedSize] = useState("M");
+  // const [selectedSize, setSelectedSize] = useState("M");
 
   const [quantity, setQuantity] = useState(1);
 
@@ -47,6 +51,69 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
+  useEffect(() => {
+    if (!product) return;
+
+    if (product.variants?.length > 0) {
+      const firstVariant = product.variants[0];
+
+      setSelectedVariant(firstVariant);
+
+      setSelectedAttributes(firstVariant.attributes || {});
+    }
+  }, [product]);
+
+  const displayProduct = {
+    ...product,
+
+    price: selectedVariant?.price ?? product?.price,
+
+    images: selectedVariant?.images?.length
+      ? selectedVariant.images
+      : product?.images,
+
+    stock: selectedVariant?.stock ?? 0,
+
+    attributes: selectedVariant?.attributes ?? {},
+  };
+
+  const attributeGroups = {};
+
+  product?.variants?.forEach((variant) => {
+    Object.entries(variant.attributes || {}).forEach(([key, value]) => {
+      if (!attributeGroups[key]) {
+        attributeGroups[key] = new Set();
+      }
+
+      attributeGroups[key].add(value);
+    });
+  });
+
+  Object.keys(attributeGroups).forEach((key) => {
+    attributeGroups[key] = [...attributeGroups[key]];
+  });
+
+  const handleAttributeSelect = (name, value) => {
+    const updatedAttributes = {
+      ...selectedAttributes,
+      [name]: value,
+    };
+
+    setSelectedAttributes(updatedAttributes);
+
+    const variant = product.variants.find((variant) => {
+      return Object.entries(updatedAttributes).every(
+        ([key, val]) => variant.attributes?.[key] === val,
+      );
+    });
+
+    if (variant) {
+      setSelectedVariant(variant);
+
+      setSelectedImage(0);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#111111] flex items-center justify-center text-white">
@@ -62,6 +129,8 @@ const ProductDetail = () => {
       </div>
     );
   }
+
+  console.log(product);
 
   return (
     <div className="min-h-screen bg-[#111111] text-white">
@@ -96,7 +165,7 @@ const ProductDetail = () => {
               {/* Thumbnail Images */}
 
               <div className="flex flex-col gap-4">
-                {product.images?.map((image, index) => (
+                {displayProduct.images?.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
@@ -139,8 +208,8 @@ const ProductDetail = () => {
               >
                 <img
                   src={
-                    product.images?.[selectedImage]?.url ||
-                    product.images?.[selectedImage]
+                    displayProduct.images?.[selectedImage]?.url ||
+                    displayProduct.images?.[selectedImage]
                   }
                   alt={product.title}
                   className="
@@ -258,15 +327,18 @@ const ProductDetail = () => {
 
             <div className="mt-5.5 flex items-end gap-4">
               <span className="text-5xl font-semibold tracking-tight">
-                ₹{product.price?.amount || product.priceAmount || product.price}
+                ₹
+                {displayProduct.price?.amount ||
+                  displayProduct.priceAmount ||
+                  displayProduct.price}
               </span>
 
               <span className="text-xl text-zinc-500 line-through">
                 ₹
                 {Math.round(
-                  (product.price?.amount ||
+                  (displayProduct.price?.amount ||
                     product.priceAmount ||
-                    product.price) * 1.35,
+                    displayProduct.price) * 1.35,
                 )}
               </span>
 
@@ -352,7 +424,12 @@ const ProductDetail = () => {
                   Availability
                 </p>
 
-                <p className="mt-2 text-green-400">In Stock</p>
+                {/* <p className="mt-2 text-green-400">In Stock</p> */}
+                <p className="mt-2 text-white">
+                  {displayProduct.stock > 0
+                    ? `${displayProduct.stock} in stock`
+                    : "Out of Stock"}
+                </p>
               </div>
             </div>
 
@@ -370,7 +447,7 @@ const ProductDetail = () => {
               </div>
 
               <div className="grid grid-cols-5 gap-3 mt-2 mr-5">
-                {["XS", "S", "M", "L", "XL"].map((size) => (
+                {/* {["XS", "S", "M", "L", "XL"].map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -391,6 +468,25 @@ const ProductDetail = () => {
                   >
                     {size}
                   </button>
+                ))} */}
+
+                {attributeGroups.size?.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handleAttributeSelect("size", size)}
+                    className={`
+        h-10
+        border
+        uppercase
+        ${
+          selectedAttributes.size === size
+            ? "bg-white text-black"
+            : "border-[#2A2A2A]"
+        }
+    `}
+                  >
+                    {size}
+                  </button>
                 ))}
               </div>
             </div>
@@ -403,11 +499,31 @@ const ProductDetail = () => {
               </p>
 
               <div className="flex items-center gap-4 mt-5">
-                <button className="w-10 h-10 rounded-full bg-black border-2 border-white" />
+                {/* <button className="w-10 h-10 rounded-full bg-black border-2 border-white" />
 
                 <button className="w-10 h-10 rounded-full bg-zinc-500 border border-[#333]" />
 
-                <button className="w-10 h-10 rounded-full bg-white border border-[#333]" />
+                <button className="w-10 h-10 rounded-full bg-white border border-[#333]" /> */}
+
+                {attributeGroups.color?.map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => handleAttributeSelect("color", color)}
+                    className={`
+        px-4
+        py-2
+        border
+        rounded
+        ${
+          selectedAttributes.color === color
+            ? "border-white"
+            : "border-[#2A2A2A]"
+        }
+    `}
+                  >
+                    {color}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -765,7 +881,10 @@ const ProductDetail = () => {
         "
                 >
                   <img
-                    src={product.images?.[0]?.url || product.images?.[0]}
+                    src={
+                      displayProduct.images?.[0]?.url ||
+                      displayProduct.images?.[0]
+                    }
                     alt={product.title}
                     className="
             w-full
@@ -822,17 +941,17 @@ const ProductDetail = () => {
                   <div className="mt-4 flex items-center gap-3">
                     <span className="text-lg font-semibold">
                       ₹
-                      {product.price?.amount ||
-                        product.priceAmount ||
-                        product.price}
+                      {displayProduct.price?.amount ||
+                        displayProduct.priceAmount ||
+                        displayProduct.price}
                     </span>
 
                     <span className="text-zinc-500 line-through">
                       ₹
                       {Math.round(
-                        (product.price?.amount ||
-                          product.priceAmount ||
-                          product.price) * 1.35,
+                        (displayProduct.price?.amount ||
+                          displayProduct.priceAmount ||
+                          displayProduct.price) * 1.35,
                       )}
                     </span>
                   </div>
