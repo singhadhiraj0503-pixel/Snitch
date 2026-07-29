@@ -735,7 +735,6 @@ const ProductDetail = () => {
               className="
       border-2
       rounded
-      cursor-pointer
       border-[#2A2A2A]
       px-8
       py-3

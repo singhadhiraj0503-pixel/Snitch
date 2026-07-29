@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Plus, Search, ShoppingBag, User } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hooks/useProduct";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { handleGetSellerProduct } = useProduct();
 
   const sellerProducts = useSelector((state) => state.product.sellerProducts);
@@ -110,7 +111,13 @@ const Dashboard = () => {
         <section className="mt-20">
           <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-12">
             {sellerProducts?.map((product) => (
-              <div key={product._id} className="group">
+              <div
+                onClick={() => {
+                  navigate(`/seller/product/${product._id}`);
+                }}
+                key={product._id}
+                className="group cursor-pointer"
+              >
                 {/* IMAGE */}
 
                 <div className="relative overflow-hidden border border-zinc-700 bg-[#181818] aspect-[3/4]">

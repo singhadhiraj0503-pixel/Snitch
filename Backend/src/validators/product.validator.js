@@ -20,3 +20,13 @@ export const createProductValidator = [
 
   validateRequest,
 ];
+
+export const addVariantValidator = [
+  body("priceAmount").isNumeric().withMessage("Price amount must be a number"),
+
+  body("stock").isNumeric().withMessage("Stock must be a number"),
+
+  body("attributes").notEmpty().withMessage("Attributes are required"),
+
+  validateRequest,
+];
