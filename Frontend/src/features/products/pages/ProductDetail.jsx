@@ -14,11 +14,13 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useProduct } from "../hooks/useProduct";
+import { useCart } from "../../cart/hooks/useCart";
 
 const ProductDetail = () => {
   const { productId } = useParams();
 
   const { handleGetProductById } = useProduct();
+  const { handleAddItem } = useCart();
 
   const [product, setProduct] = useState(null);
 
@@ -114,6 +116,8 @@ const ProductDetail = () => {
     }
   };
 
+  // console.log({ product, selectedVariant });
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#111111] flex items-center justify-center text-white">
@@ -129,8 +133,6 @@ const ProductDetail = () => {
       </div>
     );
   }
-
-  console.log(product);
 
   return (
     <div className="min-h-screen bg-[#111111] text-white">
@@ -568,6 +570,12 @@ const ProductDetail = () => {
 
             <div className="mt-8 space-y-4 mr-5">
               <button
+                onClick={() => {
+                  handleAddItem({
+                    productId: product._id,
+                    variantId: selectedVariant._id,
+                  });
+                }}
                 className="
     w-full
     h-16
