@@ -1,8 +1,13 @@
 import React from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import { Search, ShoppingBag, User } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2a2a2a]">
       <div className="max-w-[1700px] mx-auto h-[68px] px-5 lg:px-7 flex items-center justify-between">
@@ -20,7 +25,7 @@ const Navbar = () => {
 
           {/* Navigation */}
 
-          <nav className="hidden lg:flex items-center gap-8">
+          {/* <nav className="hidden lg:flex items-center gap-8">
             <NavLink
               to="/"
               className={({ isActive }) =>
@@ -54,6 +59,51 @@ const Navbar = () => {
             >
               Sell
             </NavLink>
+          </nav> */}
+
+          <nav className="hidden lg:flex items-center gap-8">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `uppercase text-[11px] tracking-[0.22em] transition ${
+                  isActive
+                    ? "text-white underline underline-offset-4"
+                    : "text-zinc-400 hover:text-white"
+                }`
+              }
+            >
+              Shop
+            </NavLink>
+
+            {user?.role === "seller" && (
+              <>
+                <NavLink
+                  to="/seller/dashboard"
+                  className={({ isActive }) =>
+                    `uppercase text-[11px] tracking-[0.22em] transition ${
+                      isActive
+                        ? "text-white underline underline-offset-4"
+                        : "text-zinc-400 hover:text-white"
+                    }`
+                  }
+                >
+                  Dashboard
+                </NavLink>
+
+                <NavLink
+                  to="/seller/create-product"
+                  className={({ isActive }) =>
+                    `uppercase text-[11px] tracking-[0.22em] transition ${
+                      isActive
+                        ? "text-white underline underline-offset-4"
+                        : "text-zinc-400 hover:text-white"
+                    }`
+                  }
+                >
+                  Create Product
+                </NavLink>
+              </>
+            )}
           </nav>
         </div>
 
@@ -82,7 +132,7 @@ const Navbar = () => {
 
           {/* Icons */}
 
-          <button
+          {/* <button
             className="
               text-zinc-300
               hover:text-white
@@ -90,14 +140,51 @@ const Navbar = () => {
             "
           >
             <ShoppingBag size={18} />
-          </button>
+          </button> */}
 
           <button
+            onClick={() => navigate("/cart")}
+            className="
+    relative
+    cursor-pointer
+    text-zinc-300
+    hover:text-white
+    transition
+  "
+          >
+            <ShoppingBag size={18} />
+          </button>
+
+          {/* <button
             className="
               text-zinc-300
               hover:text-white
               transition
             "
+          >
+            <User size={18} />
+          </button> */}
+
+          <button
+            onClick={() => {
+              if (!user) {
+                navigate("/login");
+                return;
+              }
+
+              if (user.role === "seller") {
+                navigate("/seller/dashboard");
+                return;
+              }
+
+              navigate("/");
+            }}
+            className="
+            cursor-pointer
+    text-zinc-300
+    hover:text-white
+    transition
+  "
           >
             <User size={18} />
           </button>
@@ -106,7 +193,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
 
-      <div className="lg:hidden border-t border-[#222]">
+      {/* <div className="lg:hidden border-t border-[#222]">
         <div className="flex justify-center gap-7 py-3">
           <NavLink
             to="/"
@@ -135,6 +222,35 @@ const Navbar = () => {
           >
             Sell
           </NavLink>
+        </div>
+      </div> */}
+
+      <div className="lg:hidden border-t border-[#222]">
+        <div className="flex justify-center gap-7 py-3">
+          <NavLink
+            to="/"
+            className="uppercase text-[10px] tracking-[0.2em] text-zinc-300"
+          >
+            Shop
+          </NavLink>
+
+          {user?.role === "seller" && (
+            <>
+              <NavLink
+                to="/seller/dashboard"
+                className="uppercase text-[10px] tracking-[0.2em] text-zinc-300"
+              >
+                Dashboard
+              </NavLink>
+
+              <NavLink
+                to="/seller/create-product"
+                className="uppercase text-[10px] tracking-[0.2em] text-zinc-300"
+              >
+                Create
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </header>

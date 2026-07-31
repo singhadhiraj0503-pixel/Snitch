@@ -18,7 +18,7 @@ const Home = () => {
   }, []);
   return (
     <div className="bg-[#111111] text-white min-h-screen">
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
       {/* <ProductCard /> */}
       <ProductGrid />

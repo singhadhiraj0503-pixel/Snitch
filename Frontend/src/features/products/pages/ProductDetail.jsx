@@ -138,7 +138,7 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-[#111111] text-white">
       {/* ================= NAVBAR ================= */}
 
-      <Navbar />
+      {/* <Navbar /> */}
 
       {/* ================= PAGE WRAPPER ================= */}
 

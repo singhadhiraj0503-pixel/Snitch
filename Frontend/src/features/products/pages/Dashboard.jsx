@@ -18,7 +18,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-[#111111] text-white flex flex-col">
       {/* ================= NAVBAR ================= */}
 
-      <header className="border-b border-zinc-800">
+      {/* <header className="border-b border-zinc-800">
         <div className="max-w-[1700px] mx-auto h-20 px-6 lg:px-10 flex items-center justify-between">
           <div className="flex items-center gap-12">
             <h1 className="text-4xl font-black tracking-tight">SNITCH</h1>
@@ -52,7 +52,7 @@ const Dashboard = () => {
             <User size={21} />
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* ================= MAIN ================= */}
 
