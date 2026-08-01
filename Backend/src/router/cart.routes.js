@@ -4,12 +4,14 @@ import {
   validateAddToCart,
   validateDecrementCartItemQuantity,
   validateIncrementCartItemQuantity,
+  validateRemoveCartItem,
 } from "../validators/cart.validator.js";
 import {
   addToCart,
   decrementCartItemQuantity,
   getCart,
   incrementCartItemQuantity,
+  removeCartItem,
 } from "../controllers/cart.controller.js";
 
 const cartRouter = express.Router();
@@ -35,6 +37,13 @@ cartRouter.patch(
   authenticateUser,
   validateDecrementCartItemQuantity,
   decrementCartItemQuantity,
+);
+
+cartRouter.delete(
+  "/remove/:productId/:variantId",
+  authenticateUser,
+  validateRemoveCartItem,
+  removeCartItem,
 );
 
 export default cartRouter;

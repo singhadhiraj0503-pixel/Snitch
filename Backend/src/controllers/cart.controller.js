@@ -238,3 +238,63 @@ export const decrementCartItemQuantity = async (req, res) => {
     });
   }
 };
+
+export const removeCartItem = async (req, res) => {
+  try {
+    const { productId, variantId } = req.params;
+
+    const cart = await cartModel.findOne({
+      user: req.user._id,
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+
+    const itemExists = cart.items.some(
+      (item) =>
+        item.product.toString() === productId &&
+        item.variant?.toString() === variantId,
+    );
+
+    if (!itemExists) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart item not found",
+      });
+    }
+
+    const updatedCart = await cartModel.findOneAndUpdate(
+      {
+        user: req.user._id,
+      },
+      {
+        $pull: {
+          items: {
+            product: productId,
+            variant: variantId,
+          },
+        },
+      },
+      {
+        returnDocument: "after",
+      },
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Item removed from cart successfully",
+      cart: updatedCart,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};

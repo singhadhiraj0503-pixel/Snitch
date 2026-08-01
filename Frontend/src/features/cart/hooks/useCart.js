@@ -4,11 +4,13 @@ import {
   decrementCartItemApi,
   getCart,
   incrementCartItemApi,
+  removeCartItemApi,
 } from "../service/cart.api";
 import {
   addItem as addItemToCart,
   decrementCartItem,
   incrementCartItem,
+  removeCartItem,
   setItems,
 } from "../state/cart.slice";
 
@@ -40,10 +42,18 @@ export const useCart = () => {
     return data;
   };
 
+  const handleRemoveCartItem = async ({ productId, variantId }) => {
+    const data = await removeCartItemApi({ productId, variantId });
+    dispatch(removeCartItem({ productId, variantId }));
+
+    return data;
+  };
+
   return {
     handleAddItem,
     handleGetcart,
     handleIncrementCartItem,
     handleDecrementCartItem,
+    handleRemoveCartItem,
   };
 };

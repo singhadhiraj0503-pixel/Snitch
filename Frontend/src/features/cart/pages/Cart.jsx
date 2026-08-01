@@ -10,8 +10,12 @@ const Cart = () => {
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
 
-  const { handleGetcart, handleIncrementCartItem, handleDecrementCartItem } =
-    useCart();
+  const {
+    handleGetcart,
+    handleIncrementCartItem,
+    handleDecrementCartItem,
+    handleRemoveCartItem,
+  } = useCart();
 
   /* -------------------------------------------------------------------------- */
   /*                                REDUX STATE                                 */
@@ -580,11 +584,17 @@ const Cart = () => {
                               {/* Remove */}
 
                               <button
-                                onClick={() => handleRemoveItem(item)}
+                                onClick={() =>
+                                  handleRemoveCartItem({
+                                    productId: item.product._id,
+                                    variantId: item.variant,
+                                  })
+                                }
                                 className="
               h-12
               px-5
               rounded-xl
+              cursor-pointer
               border
               border-red-500/40
               text-red-400

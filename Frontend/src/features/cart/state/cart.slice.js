@@ -41,9 +41,22 @@ export const cartSlice = createSlice({
         })
         .filter((item) => item.quantity > 0);
     },
+    removeCartItem: (state, action) => {
+      const { productId, variantId } = action.payload;
+
+      state.items = state.items.filter(
+        (item) =>
+          !(item.product._id === productId && item.variant === variantId),
+      );
+    },
   },
 });
 
-export const { setItems, addItem, incrementCartItem, decrementCartItem } =
-  cartSlice.actions;
+export const {
+  setItems,
+  addItem,
+  incrementCartItem,
+  decrementCartItem,
+  removeCartItem,
+} = cartSlice.actions;
 export default cartSlice.reducer;

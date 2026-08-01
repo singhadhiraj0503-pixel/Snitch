@@ -33,3 +33,11 @@ export const validateDecrementCartItemQuantity = [
 
   validateRequest,
 ];
+
+export const validateRemoveCartItem = [
+  param("productId").isMongoId().withMessage("Invalid product ID"),
+
+  param("variantId").optional().isMongoId().withMessage("Invalid Variant ID"),
+
+  validateRequest,
+];
