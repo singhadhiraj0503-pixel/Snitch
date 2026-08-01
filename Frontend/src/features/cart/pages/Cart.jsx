@@ -477,6 +477,8 @@ const Cart = () => {
                               <h2 className="mt-2 text-3xl font-semibold">
                                 ₹{formatCurrency(price)}
                               </h2>
+
+                              <p className="pt-4 opacity-75 text-sm"></p>
                             </div>
 
                             {/* ================= ACTIONS ================= */}
