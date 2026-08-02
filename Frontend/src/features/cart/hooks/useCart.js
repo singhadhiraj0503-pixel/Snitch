@@ -7,11 +7,10 @@ import {
   removeCartItemApi,
 } from "../service/cart.api";
 import {
-  addItem as addItemToCart,
+  setCart,
   decrementCartItem,
   incrementCartItem,
   removeCartItem,
-  setItems,
 } from "../state/cart.slice";
 
 export const useCart = () => {
@@ -25,7 +24,7 @@ export const useCart = () => {
 
   const handleGetcart = async () => {
     const data = await getCart();
-    dispatch(setItems(data.cart.items));
+    dispatch(setCart(data.cart));
   };
 
   const handleIncrementCartItem = async ({ productId, variantId }) => {

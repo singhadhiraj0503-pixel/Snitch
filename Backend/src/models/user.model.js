@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     enum: ["buyer", "seller"],
     default: "buyer",
   },
-  googleId: { type: String, required: true },
+  googleId: { type: String, default: null },
 });
 
 userSchema.pre("save", async function () {

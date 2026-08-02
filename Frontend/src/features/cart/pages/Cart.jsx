@@ -21,7 +21,9 @@ const Cart = () => {
   /*                                REDUX STATE                                 */
   /* -------------------------------------------------------------------------- */
 
-  const cartItems = useSelector((state) => state.cart.items);
+  const cart = useSelector((state) => state.cart.items);
+
+  console.log(cart);
 
   /* -------------------------------------------------------------------------- */
   /*                                LOCAL STATE                                 */
@@ -53,11 +55,7 @@ const Cart = () => {
 
   // Returns the selected variant from the product
   const getVariant = (item) => {
-    if (!item?.product) return null;
-
-    return item.product.variants.find(
-      (variant) => variant._id === item.variant,
-    );
+    return item.product?.variants ?? null;
   };
 
   // Display Variant Image
@@ -66,11 +64,11 @@ const Cart = () => {
   const getDisplayImage = (item) => {
     const variant = getVariant(item);
 
-    if (variant?.images?.length > 0) {
+    if (variant?.images?.length) {
       return variant.images[0].url;
     }
 
-    return item.product.images?.[0]?.url;
+    return item.product.images?.[0]?.url ?? "";
   };
 
   // Display Variant Price
@@ -79,32 +77,22 @@ const Cart = () => {
   const getDisplayPrice = (item) => {
     const variant = getVariant(item);
 
-    if (variant?.price?.amount) {
-      return variant.price.amount;
-    }
-
-    return item.product.price.amount;
+    return variant?.price?.amount ?? item.product?.price?.amount ?? 0;
   };
 
   // Display Variant Size
   const getVariantSize = (item) => {
-    const variant = getVariant(item);
-
-    return variant?.attributes?.size ?? "-";
+    return getVariant(item)?.attributes?.size ?? "-";
   };
 
   // Display Variant Color
   const getVariantColor = (item) => {
-    const variant = getVariant(item);
-
-    return variant?.attributes?.color ?? "-";
+    return getVariant(item)?.attributes?.color ?? "-";
   };
 
   // Display Variant Stock
   const getVariantStock = (item) => {
-    const variant = getVariant(item);
-
-    return variant?.stock ?? 0;
+    return getVariant(item)?.stock ?? 0;
   };
 
   // Currency Formatter
@@ -118,10 +106,10 @@ const Cart = () => {
   /* -------------------------------------------------------------------------- */
 
   const subtotal = useMemo(() => {
-    return cartItems.reduce((total, item) => {
+    return cart.reduce((total, item) => {
       return total + getDisplayPrice(item) * item.quantity;
     }, 0);
-  }, [cartItems]);
+  }, [cart]);
 
   const shipping = useMemo(() => {
     if (subtotal >= 5000) return 0;
@@ -173,7 +161,7 @@ const Cart = () => {
   /*                              EMPTY CART STATE                              */
   /* -------------------------------------------------------------------------- */
 
-  if (!cartItems.length) {
+  if (!cart.length) {
     return (
       <div className="min-h-screen bg-[#111111] text-white">
         {/* <Navbar /> */}
@@ -233,7 +221,7 @@ const Cart = () => {
                 </h2>
 
                 <p className="mt-2 text-sm text-zinc-500">
-                  {cartItems.length} Item{cartItems.length > 1 ? "s" : ""}
+                  {cart.length} Item{cart.length > 1 ? "s" : ""}
                 </p>
               </div>
             </div>
@@ -241,7 +229,7 @@ const Cart = () => {
             {/* ================= CART LIST ================= */}
 
             <div className="space-y-6">
-              {cartItems.map((item) => {
+              {cart.map((item) => {
                 const variant = getVariant(item);
 
                 const image = getDisplayImage(item);
