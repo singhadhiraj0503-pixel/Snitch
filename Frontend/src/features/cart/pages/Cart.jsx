@@ -4,8 +4,11 @@ import { Heart, Trash2, Lock, ShoppingBag, Minus, Plus } from "lucide-react";
 import { useCart } from "../hooks/useCart";
 import Navbar from "../../products/components/Navbar";
 import Footer from "../../products/components/Footer";
+import { useRazorpay } from "react-razorpay";
+import { useNavigate } from "react-router";
 
 const Cart = () => {
+  const navigate = useNavigate();
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
@@ -15,15 +18,17 @@ const Cart = () => {
     handleIncrementCartItem,
     handleDecrementCartItem,
     handleRemoveCartItem,
+    handleCreateCartOrder,
+    handleVerifyCartOrder,
   } = useCart();
 
+  const { error, isLoading, Razorpay } = useRazorpay();
   /* -------------------------------------------------------------------------- */
   /*                                REDUX STATE                                 */
   /* -------------------------------------------------------------------------- */
 
   const cart = useSelector((state) => state.cart.items);
-
-  console.log(cart);
+  const user = useSelector((state) => state.user);
 
   /* -------------------------------------------------------------------------- */
   /*                                LOCAL STATE                                 */
@@ -55,7 +60,11 @@ const Cart = () => {
 
   // Returns the selected variant from the product
   const getVariant = (item) => {
-    return item.product?.variants ?? null;
+    if (!item) return null;
+
+    if (!item.product) return null;
+
+    return item.product.variants || null;
   };
 
   // Display Variant Image
@@ -64,11 +73,15 @@ const Cart = () => {
   const getDisplayImage = (item) => {
     const variant = getVariant(item);
 
-    if (variant?.images?.length) {
+    if (variant && Array.isArray(variant.images) && variant.images.length > 0) {
       return variant.images[0].url;
     }
 
-    return item.product.images?.[0]?.url ?? "";
+    if (item?.product?.images && item.product.images.length > 0) {
+      return item.product.images[0].url;
+    }
+
+    return "";
   };
 
   // Display Variant Price
@@ -143,6 +156,37 @@ const Cart = () => {
 
   const handleMoveToWishlist = (item) => {
     console.log("Wishlist", item);
+  };
+
+  const handleCheckout = async () => {
+    const order = await handleCreateCartOrder();
+    console.log(order);
+
+    const options = {
+      key: "rzp_test_TLOOE4wdg3HcTG",
+      amount: order.amount, // Amount in paise
+      currency: order.currency,
+      name: "Snitch",
+      description: "Test Transaction",
+      order_id: order.id, // Generate order_id on server
+      handler: async (response) => {
+        const isValid = await handleVerifyCartOrder(response);
+        if (!isValid) {
+          navigate(`/order-success?order_id=${response?.razorpay_order_id}`);
+        }
+      },
+      prefill: {
+        name: user?.fullname,
+        email: user?.email,
+        contact: user?.contact,
+      },
+      theme: {
+        color: "#F37254",
+      },
+    };
+
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
   };
 
   /* -------------------------------------------------------------------------- */
@@ -673,10 +717,12 @@ const Cart = () => {
               </div>
 
               <button
+                onClick={handleCheckout}
                 className="
                 mt-10
                 w-full
                 h-14
+                cursor-pointer
                 rounded-xl
                 bg-white
                 text-black

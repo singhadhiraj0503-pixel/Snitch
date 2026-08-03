@@ -8,10 +8,12 @@ import {
 } from "../validators/cart.validator.js";
 import {
   addToCart,
+  createOrderController,
   decrementCartItemQuantity,
   getCart,
   incrementCartItemQuantity,
   removeCartItem,
+  verifyOrderController,
 } from "../controllers/cart.controller.js";
 
 const cartRouter = express.Router();
@@ -44,6 +46,18 @@ cartRouter.delete(
   authenticateUser,
   validateRemoveCartItem,
   removeCartItem,
+);
+
+cartRouter.post(
+  "/payment/create/order",
+  authenticateUser,
+  createOrderController,
+);
+
+cartRouter.post(
+  "/payment/verify/order",
+  authenticateUser,
+  verifyOrderController,
 );
 
 export default cartRouter;
