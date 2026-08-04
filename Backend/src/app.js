@@ -35,6 +35,7 @@ passport.use(
     },
   ),
 );
+app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Server is running successfully" });
