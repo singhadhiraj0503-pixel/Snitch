@@ -397,5 +397,45 @@ export const verifyOrderController = async (req, res) => {
   return res.status(200).json({
     message: "Payment verified successfully",
     success: true,
+    order: {
+      _id: payment._id,
+      razorpay: payment.razorpay,
+    },
   });
+};
+
+export const getOrderDetails = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // const order = await paymentModel.findOne({
+    //   _id: orderId,
+    //   user: req.user._id,
+    //   status: "paid",
+    // });
+
+    const order = await paymentModel.findOne({
+      "razorpay.orderId": orderId,
+      user: req.user._id,
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      order,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 };

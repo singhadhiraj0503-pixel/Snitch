@@ -11,6 +11,7 @@ import {
   createOrderController,
   decrementCartItemQuantity,
   getCart,
+  getOrderDetails,
   incrementCartItemQuantity,
   removeCartItem,
   verifyOrderController,
@@ -59,5 +60,7 @@ cartRouter.post(
   authenticateUser,
   verifyOrderController,
 );
+
+cartRouter.get("/order/:orderId", authenticateUser, getOrderDetails);
 
 export default cartRouter;

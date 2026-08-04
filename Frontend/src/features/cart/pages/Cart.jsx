@@ -171,7 +171,7 @@ const Cart = () => {
       order_id: order.id, // Generate order_id on server
       handler: async (response) => {
         const isValid = await handleVerifyCartOrder(response);
-        if (!isValid) {
+        if (isValid) {
           navigate(`/order-success?order_id=${response?.razorpay_order_id}`);
         }
       },

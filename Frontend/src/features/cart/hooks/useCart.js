@@ -4,6 +4,7 @@ import {
   createCartOrder,
   decrementCartItemApi,
   getCart,
+  getOrderDetails,
   incrementCartItemApi,
   removeCartItemApi,
   verifyCartOrder,
@@ -77,6 +78,11 @@ export const useCart = () => {
     return data.success;
   };
 
+  const handleGetOrderDetails = async (orderId) => {
+    const data = await getOrderDetails(orderId);
+    return data.order;
+  };
+
   return {
     handleAddItem,
     handleGetcart,
@@ -85,5 +91,6 @@ export const useCart = () => {
     handleRemoveCartItem,
     handleCreateCartOrder,
     handleVerifyCartOrder,
+    handleGetOrderDetails,
   };
 };

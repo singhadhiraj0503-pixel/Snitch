@@ -58,3 +58,8 @@ export const verifyCartOrder = async ({
   });
   return response.data;
 };
+
+export const getOrderDetails = async (orderId) => {
+  const response = await cartApiInstance.get(`/order/${orderId}`);
+  return response.data;
+};
