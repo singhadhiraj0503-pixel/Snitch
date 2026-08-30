@@ -212,7 +212,7 @@ const Dashboard = () => {
             {/* ================= ADD NEW PRODUCT CARD ================= */}
 
             <Link
-              to="/create-product"
+              to="/seller/create-product"
               className="
 group
 border-2
