@@ -2,6 +2,13 @@ import { config } from "../config/config.js";
 import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 const sendTokenResponse = async (user, res, message) => {
   const token = jwt.sign(
     {
@@ -11,7 +18,7 @@ const sendTokenResponse = async (user, res, message) => {
     { expiresIn: "7d" },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, cookieOptions);
 
   res.status(200).json({
     message,
@@ -103,7 +110,7 @@ export const googleCallback = async (req, res) => {
     { expiresIn: "7d" },
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, cookieOptions);
 
   res.redirect(config.CORS_ORIGIN);
 };
